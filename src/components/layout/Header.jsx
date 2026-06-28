@@ -37,8 +37,8 @@ export default function Header() {
     <header className="bg-dxn-red text-white shadow-lg">
       <div className="max-w-6xl mx-auto px-4 py-2">
         <div className="flex items-center justify-between gap-2">
-          <Link to="/" className="text-lg md:text-2xl font-bold tracking-tight shrink-0">
-            Casa DXN Chile
+          <Link to="/" className="shrink-0">
+            <img src="/logo.png" alt="Casa DXN Chile" className="h-8 md:h-10" />
           </Link>
           <div className="flex items-center gap-1 md:gap-4 text-sm">
             {isLoginPage ? (
