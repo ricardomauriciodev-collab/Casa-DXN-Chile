@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { generateWhatsAppLink } from '../../utils/whatsappFormatter'
@@ -7,12 +8,15 @@ import Button from '../ui/Button'
 export default function CartSummary() {
   const { items, clearCart } = useCart()
   const { user } = useAuth()
+  const navigate = useNavigate()
 
   function handleWhatsApp() {
     if (!user) return
     const link = generateWhatsAppLink(user, items)
     window.open(link, '_blank')
-    createOrder(user.id, user.nombre_completo, items).then(clearCart).catch(() => {})
+    createOrder(user.id, user.nombre_completo, items)
+      .then(() => { clearCart(); navigate('/') })
+      .catch(() => {})
   }
 
   if (items.length === 0) return null

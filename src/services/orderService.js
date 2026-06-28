@@ -3,8 +3,8 @@ import { supabase } from '../config/supabaseClient'
 const STORAGE_KEY = 'dxn_orders'
 
 const SEED_ORDERS = [
-  { id: 'o1', user_id: 'u1', nombre_cliente: 'Juan Pérez', items: [{ productId: 'p1', name: 'DXN Spirudle', quantity: 2, price: 6672, pv: 2.1 }], total: 13344, totalPV: 4.2, status: 'pendiente', created_at: new Date().toISOString() },
-  { id: 'o2', user_id: 'u2', nombre_cliente: 'María González', items: [{ productId: 'p3', name: 'DXN Spirulina Coffee', quantity: 1, price: 19251, pv: 8.3 }], total: 19251, totalPV: 8.3, status: 'aprobado', created_at: new Date().toISOString() },
+  { id: 'o1', user_id: 'u1', user_name: 'Juan Pérez', items: [{ productId: 'p1', name: 'DXN Spirudle', quantity: 2, price: 6672, pv: 2.1 }], total_clp: 13344, total_pv: 4.2, status: 'pendiente', created_at: new Date().toISOString() },
+  { id: 'o2', user_id: 'u2', user_name: 'María González', items: [{ productId: 'p3', name: 'DXN Spirulina Coffee', quantity: 1, price: 19251, pv: 8.3 }], total_clp: 19251, total_pv: 8.3, status: 'aprobado', created_at: new Date().toISOString() },
 ]
 
 function loadMockOrders() {
@@ -30,10 +30,10 @@ export async function createOrder(userId, nombreCliente, items) {
   const totalPV = Math.round(items.reduce((s, i) => s + (i.pv || 0) * i.quantity, 0) * 100) / 100
   const orderData = {
     user_id: userId,
-    nombre_cliente: nombreCliente,
+    user_name: nombreCliente,
     items,
-    total,
-    totalPV,
+    total_clp: total,
+    total_pv: totalPV,
     status: 'pendiente',
     created_at: new Date().toISOString(),
   }

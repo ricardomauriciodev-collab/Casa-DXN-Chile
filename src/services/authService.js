@@ -8,6 +8,14 @@ const FIXED_USERS = [
 export async function loginMock(username, password) {
   const fixedUser = FIXED_USERS.find(u => u.username === username && u.password === password)
   if (fixedUser) {
+    if (supabase) {
+      const { data, error } = await supabase.from('users').select('*').eq('username', username).eq('password', password).maybeSingle()
+      if (!error && data) {
+        const { password: _, ...safeUser } = data
+        localStorage.setItem('dxn_user', JSON.stringify(safeUser))
+        return safeUser
+      }
+    }
     const { password: _, ...safeUser } = fixedUser
     localStorage.setItem('dxn_user', JSON.stringify(safeUser))
     return safeUser

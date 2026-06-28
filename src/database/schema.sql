@@ -39,6 +39,17 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 
 -- ============================================================
+-- RLS: Políticas para orders
+-- ============================================================
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can insert orders" ON orders
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can read orders" ON orders
+  FOR SELECT USING (true);
+
+-- ============================================================
 -- SEED: Productos DXN Chile
 -- ============================================================
 INSERT INTO products (name, price, pv, stock, low_stock_threshold, out_of_stock_threshold, image_url) VALUES
