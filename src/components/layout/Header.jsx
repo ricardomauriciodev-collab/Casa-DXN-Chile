@@ -11,18 +11,16 @@ function PVProgressBar({ totalPV }) {
     return 'text-white'
   }
   return (
-    <div className="flex flex-col items-center gap-0.5 text-xs w-72">
-      <div className="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+    <div className="flex items-center gap-2 flex-1 max-w-60 text-xs">
+      <div className="flex-1 h-2.5 bg-white/20 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-300 ${pct >= 100 ? 'bg-green-400' : pct >= 30 ? 'bg-green-500' : 'bg-white/40'}`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className={`font-bold ${textColor(pct)} transition-colors duration-300`}>
+      <span className={`font-bold whitespace-nowrap ${textColor(pct)} transition-colors duration-300`}>
         {totalPV} PV
       </span>
-      {totalPV >= 100 && <span className="bg-green-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">100 PV</span>}
-      {totalPV >= 30 && totalPV < 100 && <span className="bg-green-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5">30 PV</span>}
     </div>
   )
 }
@@ -38,8 +36,13 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4 py-2">
         <div className="flex items-center justify-between gap-2">
           <Link to="/" className="shrink-0">
-            <img src="/logo.png" alt="Casa DXN Chile" className="h-8 md:h-10" />
+            <img src="/logo.png" alt="Casa DXN Chile" className="h-10 md:h-12" />
           </Link>
+          {!isLoginPage && (
+            <div className="hidden md:flex flex-1 justify-center">
+              <PVProgressBar totalPV={totalPV} />
+            </div>
+          )}
           <div className="flex items-center gap-1 md:gap-4 text-sm">
             {isLoginPage ? (
               <Link to="/" className="bg-white text-dxn-red px-3 py-1 rounded text-xs font-semibold hover:bg-gray-100 shrink-0">
@@ -75,11 +78,6 @@ export default function Header() {
             )}
           </div>
         </div>
-        {!isLoginPage && (
-          <div className="flex justify-center mt-2">
-            <PVProgressBar totalPV={totalPV} />
-          </div>
-        )}
       </div>
     </header>
   )
