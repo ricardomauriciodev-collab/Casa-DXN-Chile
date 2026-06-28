@@ -8,9 +8,9 @@ export default function CartSummary() {
   const { items, clearCart } = useCart()
   const { user } = useAuth()
 
-  function handleWhatsApp() {
+  async function handleWhatsApp() {
     if (!user) return
-    createOrder(user.id, user.nombre_completo, items)
+    await createOrder(user.id, user.nombre_completo, items)
     const link = generateWhatsAppLink(user, items)
     window.open(link, '_blank')
     clearCart()

@@ -15,7 +15,7 @@ export default function InventoryTable() {
   const [imageError, setImageError] = useState('')
   const fileInputRef = useRef(null)
 
-  useEffect(() => { setProducts(getProducts()) }, [refresh])
+  useEffect(() => { getProducts().then(setProducts) }, [refresh])
 
   function openNewForm() {
     setEditId(null)
@@ -35,20 +35,20 @@ export default function InventoryTable() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     if (editId) {
-      updateProduct(editId, form)
+      await updateProduct(editId, form)
     } else {
-      createProduct(form)
+      await createProduct(form)
     }
     setShowForm(false)
     setRefresh(r => r + 1)
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     if (!confirm('¿Eliminar este producto?')) return
-    deleteProduct(id)
+    await deleteProduct(id)
     setRefresh(r => r + 1)
   }
 

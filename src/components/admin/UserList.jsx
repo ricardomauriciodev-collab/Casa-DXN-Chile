@@ -7,11 +7,11 @@ export default function UserList() {
   const [refresh, setRefresh] = useState(0)
 
   useEffect(() => {
-    setUsers(getUsers())
+    getUsers().then(setUsers)
   }, [refresh])
 
-  function handleDelete(id) {
-    deleteUser(id)
+  async function handleDelete(id) {
+    await deleteUser(id)
     setRefresh(r => r + 1)
   }
 

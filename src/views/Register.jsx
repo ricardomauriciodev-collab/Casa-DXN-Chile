@@ -39,14 +39,14 @@ export default function Register() {
     return nombre.toLowerCase().replace(/\s+/g, '')
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     if (!form.nombre_completo || !form.rut || !form.codigo_distribuidor || !form.direccion) {
       setError('Todos los campos son obligatorios.')
       return
     }
-    registerUser(form)
+    await registerUser(form)
     navigate('/login')
   }
 

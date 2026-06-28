@@ -21,7 +21,7 @@ export default function Catalog() {
   const { items, addItem, updateQuantity, removeItem } = useCart()
 
   useEffect(() => {
-    setProducts(getProducts())
+    getProducts().then(setProducts)
   }, [])
 
   function getItemQuantity(productId) {

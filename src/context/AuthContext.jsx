@@ -11,8 +11,8 @@ export function AuthProvider({ children }) {
     if (stored) setUser(stored)
   }, [])
 
-  function login(username, password) {
-    const u = loginMock(username, password)
+  async function login(username, password) {
+    const u = await loginMock(username, password)
     if (u) setUser(u)
     return !!u
   }

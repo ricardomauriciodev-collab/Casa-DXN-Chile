@@ -35,49 +35,51 @@ export default function Header() {
 
   return (
     <header className="bg-dxn-red text-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between gap-2">
-        <Link to="/" className="text-lg md:text-2xl font-bold tracking-tight shrink-0">
-          Casa DXN Chile
-        </Link>
+      <div className="max-w-6xl mx-auto px-4 py-2">
+        <div className="flex items-center justify-between gap-2">
+          <Link to="/" className="text-lg md:text-2xl font-bold tracking-tight shrink-0">
+            Casa DXN Chile
+          </Link>
+          <div className="flex items-center gap-1 md:gap-4 text-sm">
+            {isLoginPage ? (
+              <Link to="/" className="bg-white text-dxn-red px-3 py-1 rounded text-xs font-semibold hover:bg-gray-100 shrink-0">
+                Volver al Catálogo
+              </Link>
+            ) : (
+              <>
+                <Link to="/" className="hover:underline md:inline hidden">Catálogo</Link>
+                <Link to="/cart" className="hover:underline relative">
+                  <span className="md:hidden text-lg">🛒</span>
+                  <span className="hidden md:inline">Carrito</span>
+                  {itemCount > 0 && (
+                    <span className="absolute -top-2 -right-4 bg-white text-dxn-red text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {itemCount}
+                    </span>
+                  )}
+                </Link>
+                {isAdmin && <Link to="/admin" className="hover:underline font-semibold hidden md:inline">Admin</Link>}
+                {user ? (
+                  <div className="flex items-center gap-1 md:gap-2">
+                    <span className="text-white/80 text-xs hidden md:inline max-w-24 truncate">{user.nombre_completo}</span>
+                    <button onClick={logout} className="bg-white text-dxn-red px-2 md:px-3 py-1 rounded text-xs font-semibold cursor-pointer hover:bg-gray-100 shrink-0">
+                      Salir
+                    </button>
+                  </div>
+                ) : (
+                  <Link to="/login" className="bg-white text-dxn-red px-2 md:px-3 py-1 rounded text-xs font-semibold hover:bg-gray-100 shrink-0">
+                    <span className="md:hidden">🔑</span>
+                    <span className="hidden md:inline">Iniciar Sesión</span>
+                  </Link>
+                )}
+              </>
+            )}
+          </div>
+        </div>
         {!isLoginPage && (
-          <div className="hidden md:block">
+          <div className="flex justify-center mt-2">
             <PVProgressBar totalPV={totalPV} />
           </div>
         )}
-        <div className="flex items-center gap-1 md:gap-4 text-sm">
-          {isLoginPage ? (
-            <Link to="/" className="bg-white text-dxn-red px-3 py-1 rounded text-xs font-semibold hover:bg-gray-100 shrink-0">
-              Volver al Catálogo
-            </Link>
-          ) : (
-            <>
-              <Link to="/" className="hover:underline md:inline hidden">Catálogo</Link>
-              <Link to="/cart" className="hover:underline relative">
-                <span className="md:hidden text-lg">🛒</span>
-                <span className="hidden md:inline">Carrito</span>
-                {itemCount > 0 && (
-                  <span className="absolute -top-2 -right-4 bg-white text-dxn-red text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
-              {isAdmin && <Link to="/admin" className="hover:underline font-semibold hidden md:inline">Admin</Link>}
-              {user ? (
-                <div className="flex items-center gap-1 md:gap-2">
-                  <span className="text-white/80 text-xs hidden md:inline max-w-24 truncate">{user.nombre_completo}</span>
-                  <button onClick={logout} className="bg-white text-dxn-red px-2 md:px-3 py-1 rounded text-xs font-semibold cursor-pointer hover:bg-gray-100 shrink-0">
-                    Salir
-                  </button>
-                </div>
-              ) : (
-                <Link to="/login" className="bg-white text-dxn-red px-2 md:px-3 py-1 rounded text-xs font-semibold hover:bg-gray-100 shrink-0">
-                  <span className="md:hidden">🔑</span>
-                  <span className="hidden md:inline">Iniciar Sesión</span>
-                </Link>
-              )}
-            </>
-          )}
-        </div>
       </div>
     </header>
   )

@@ -15,24 +15,26 @@ export default function OrderList() {
   const [filter, setFilter] = useState('pendiente')
 
   useEffect(() => {
-    setOrders(getOrders())
+    getOrders().then(setOrders)
   }, [refresh])
 
-  function handleApprove(orderId) {
+  async function handleApprove(orderId) {
     const order = orders.find(o => o.id === orderId)
     if (!order) return
-    const canDeduct = order.items.every(item => deductStock(item.product_id || item.id, item.quantity))
-    if (!canDeduct) {
-      alert('Stock insuficiente para aprobar este pedido.')
-      return
+    for (const item of order.items) {
+      const ok = await deductStock(item.product_id || item.id, item.quantity)
+      if (!ok) {
+        alert('Stock insuficiente para aprobar este pedido.')
+        return
+      }
     }
-    approveOrder(orderId)
+    await approveOrder(orderId)
     setRefresh(r => r + 1)
   }
 
-  function handleReject(orderId) {
+  async function handleReject(orderId) {
     if (!confirm('¿Rechazar y eliminar este pedido permanentemente?')) return
-    rejectOrder(orderId)
+    await rejectOrder(orderId)
     setRefresh(r => r + 1)
   }
 
@@ -64,7 +66,7 @@ export default function OrderList() {
           <div key={o.id} className={`bg-white border rounded-lg p-4 ${o.status === 'pendiente' ? 'border-l-4 border-l-yellow-400' : 'border-l-4 border-l-green-400'}`}>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm md:text-base">{o.user_name}</p>
+                <p className="font-semibold text-sm md:text-base">{o.nombre_cliente}</p>
                 <p className="text-xs text-gray-500">{formatDate(o.created_at)}</p>
                 <p className="text-xs text-gray-400 mt-1">Pedido #{o.id.slice(0, 8)}</p>
                 <ul className="mt-2 space-y-1">
@@ -76,8 +78,8 @@ export default function OrderList() {
                   ))}
                 </ul>
                 <div className="mt-2 pt-2 border-t flex flex-wrap gap-x-4 gap-y-1 text-xs md:text-sm font-semibold">
-                  <span>Total: ${o.total_clp.toLocaleString('es-CL')}</span>
-                  <span className="text-gray-500">{Math.round(o.total_pv * 100) / 100} PV</span>
+                  <span>Total: ${o.total.toLocaleString('es-CL')}</span>
+                  <span className="text-gray-500">{Math.round(o.totalPV * 100) / 100} PV</span>
                   <span className={`${o.status === 'pendiente' ? 'text-yellow-600' : 'text-green-600'}`}>
                     {o.status === 'pendiente' ? 'Pendiente' : 'Aprobado'}
                   </span>
