@@ -1,4 +1,4 @@
-const OWNER_NUMBER = '56912345678'
+const OWNER_NUMBER = '56975716555'
 
 function formatCLP(amount) {
   return '$' + amount.toLocaleString('es-CL')

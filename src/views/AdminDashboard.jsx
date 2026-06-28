@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Panel de Administración</h1>
-      <div className="flex gap-2 mb-6 border-b">
+      <div className="flex gap-2 mb-6 border-b overflow-x-auto">
         {TABS.map(tab => (
           <button
             key={tab.key}
