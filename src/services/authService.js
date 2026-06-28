@@ -12,12 +12,12 @@ export async function loginMock(username, password) {
       const { data, error } = await supabase.from('users').select('*').eq('username', username).eq('password', password).maybeSingle()
       if (!error && data) {
         const { password: _, ...safeUser } = data
-        localStorage.setItem('dxn_user', JSON.stringify(safeUser))
+        sessionStorage.setItem('dxn_user', JSON.stringify(safeUser))
         return safeUser
       }
     }
     const { password: _, ...safeUser } = fixedUser
-    localStorage.setItem('dxn_user', JSON.stringify(safeUser))
+    sessionStorage.setItem('dxn_user', JSON.stringify(safeUser))
     return safeUser
   }
 
@@ -26,7 +26,7 @@ export async function loginMock(username, password) {
     if (error) throw error
     if (data) {
       const { password: _, ...safeUser } = data
-      localStorage.setItem('dxn_user', JSON.stringify(safeUser))
+      sessionStorage.setItem('dxn_user', JSON.stringify(safeUser))
       return safeUser
     }
   } else {
@@ -35,7 +35,7 @@ export async function loginMock(username, password) {
     const user = allUsers.find(u => u.username === username && u.password === password)
     if (user) {
       const { password: _, ...safeUser } = user
-      localStorage.setItem('dxn_user', JSON.stringify(safeUser))
+      sessionStorage.setItem('dxn_user', JSON.stringify(safeUser))
       return safeUser
     }
   }
@@ -44,14 +44,14 @@ export async function loginMock(username, password) {
 }
 
 export function autoLoginFromRegister(userData) {
-  localStorage.setItem('dxn_user', JSON.stringify(userData))
+  sessionStorage.setItem('dxn_user', JSON.stringify(userData))
 }
 
 export function logoutMock() {
-  localStorage.removeItem('dxn_user')
+  sessionStorage.removeItem('dxn_user')
 }
 
 export function getCurrentUser() {
-  const raw = localStorage.getItem('dxn_user')
+  const raw = sessionStorage.getItem('dxn_user')
   return raw ? JSON.parse(raw) : null
 }
