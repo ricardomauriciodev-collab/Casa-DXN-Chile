@@ -48,3 +48,17 @@ INSERT INTO products (name, price, pv, stock, low_stock_threshold, out_of_stock_
   ('DXN Apple Jam',             13837, 4.6, 25, 10, 0, NULL),
   ('DXN Spirulina Tablet 500''s', 77567, 18.7, 20, 10, 0, NULL),
   ('DXN Spirulina Tablet 120''s', 21448, 5.2, 60, 10, 0, NULL);
+
+-- ============================================================
+-- STORAGE: Bucket para imágenes de productos
+-- ============================================================
+INSERT INTO storage.buckets (id, name, public) VALUES ('product-images', 'product-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Permitir acceso público de lectura a las imágenes
+CREATE POLICY "Public read access" ON storage.objects
+  FOR SELECT USING (bucket_id = 'product-images');
+
+-- Permitir acceso de inserción/actualización autenticado (anon key puede insertar)
+CREATE POLICY "Authenticated insert access" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'product-images');

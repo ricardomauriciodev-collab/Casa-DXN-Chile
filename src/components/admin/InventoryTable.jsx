@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../../services/productService'
+import { getProducts, createProduct, updateProduct, deleteProduct, uploadImage } from '../../services/productService'
 import Button from '../ui/Button'
 import Modal from '../ui/Modal'
 
@@ -14,6 +14,7 @@ export default function InventoryTable() {
   const [dragOver, setDragOver] = useState(false)
   const [imageError, setImageError] = useState('')
   const fileInputRef = useRef(null)
+  const uploadFileRef = useRef(null)
 
   useEffect(() => { getProducts().then(setProducts) }, [refresh])
 
@@ -21,6 +22,7 @@ export default function InventoryTable() {
     setEditId(null)
     setForm({ name: '', price: '', pv: '', stock: '', low_stock_threshold: '10', out_of_stock_threshold: '0', image_url: '' })
     setImageError('')
+    uploadFileRef.current = null
     setShowForm(true)
   }
 
@@ -28,6 +30,7 @@ export default function InventoryTable() {
     setEditId(p.id)
     setForm({ name: p.name, price: String(p.price), pv: String(p.pv), stock: String(p.stock), low_stock_threshold: String(p.low_stock_threshold), out_of_stock_threshold: String(p.out_of_stock_threshold), image_url: p.image_url || '' })
     setImageError('')
+    uploadFileRef.current = null
     setShowForm(true)
   }
 
@@ -37,11 +40,17 @@ export default function InventoryTable() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (editId) {
-      await updateProduct(editId, form)
-    } else {
-      await createProduct(form)
+    let imageUrl = form.image_url
+    if (uploadFileRef.current) {
+      imageUrl = await uploadImage(uploadFileRef.current)
     }
+    const productData = { ...form, image_url: imageUrl }
+    if (editId) {
+      await updateProduct(editId, productData)
+    } else {
+      await createProduct(productData)
+    }
+    uploadFileRef.current = null
     setShowForm(false)
     setRefresh(r => r + 1)
   }
@@ -58,6 +67,7 @@ export default function InventoryTable() {
       setImageError(`Imagen demasiado grande (${(file.size / 1024 / 1024).toFixed(1)} MB). Máximo 2 MB.`)
       return
     }
+    uploadFileRef.current = file
     setForm(prev => ({ ...prev, image_url: URL.createObjectURL(file) }))
   }
 
@@ -164,7 +174,7 @@ export default function InventoryTable() {
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
             </div>
             {form.image_url && (
-              <button type="button" onClick={() => { setForm(prev => ({ ...prev, image_url: '' })); setImageError('') }} className="text-xs text-red-500 hover:text-red-700 mt-1 underline">
+              <button type="button" onClick={() => { setForm(prev => ({ ...prev, image_url: '' })); setImageError(''); uploadFileRef.current = null }} className="text-xs text-red-500 hover:text-red-700 mt-1 underline">
                 Quitar imagen
               </button>
             )}

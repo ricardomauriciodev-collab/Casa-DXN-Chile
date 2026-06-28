@@ -104,6 +104,19 @@ export function updateProductStock(productId, newStock) {
   return updateProduct(productId, { stock: newStock })
 }
 
+export async function uploadImage(file) {
+  if (!supabase) return null
+  const ext = file.name.split('.').pop()
+  const fileName = `${Date.now()}.${ext}`
+  const { error } = await supabase.storage.from('product-images').upload(fileName, file, {
+    cacheControl: '3600',
+    upsert: false,
+  })
+  if (error) throw error
+  const { data: { publicUrl } } = supabase.storage.from('product-images').getPublicUrl(fileName)
+  return publicUrl
+}
+
 export async function deductStock(productId, quantity) {
   if (!supabase) {
     const idx = MOCK_PRODUCTS.findIndex(p => p.id === productId)
