@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS orders (
   total_clp INT NOT NULL,
   total_pv NUMERIC NOT NULL,
   status TEXT DEFAULT 'pendiente',
+  approved_at TIMESTAMPTZ DEFAULT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -79,6 +80,12 @@ CREATE POLICY "Anyone can insert orders" ON orders
 
 CREATE POLICY "Anyone can read orders" ON orders
   FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can update orders" ON orders
+  FOR UPDATE USING (true);
+
+CREATE POLICY "Anyone can delete orders" ON orders
+  FOR DELETE USING (true);
 
 -- ============================================================
 -- SEED: Productos DXN Chile

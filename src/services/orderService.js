@@ -50,13 +50,14 @@ export async function createOrder(userId, nombreCliente, items) {
 }
 
 export async function approveOrder(orderId) {
+  const now = new Date().toISOString()
   if (!supabase) {
     const orders = loadMockOrders()
     const o = orders.find(o => o.id === orderId)
-    if (o) { o.status = 'aprobado'; saveMockOrders(orders) }
+    if (o) { o.status = 'aprobado'; o.approved_at = now; saveMockOrders(orders) }
     return
   }
-  const { error } = await supabase.from('orders').update({ status: 'aprobado' }).eq('id', orderId)
+  const { error } = await supabase.from('orders').update({ status: 'aprobado', approved_at: now }).eq('id', orderId)
   if (error) throw error
 }
 

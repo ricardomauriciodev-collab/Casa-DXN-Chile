@@ -13,28 +13,42 @@ export default function OrderList() {
   const [orders, setOrders] = useState([])
   const [refresh, setRefresh] = useState(0)
   const [filter, setFilter] = useState('pendiente')
+  const [loading, setLoading] = useState(null)
 
   useEffect(() => {
     getOrders().then(setOrders)
   }, [refresh])
 
   async function handleApprove(orderId) {
+    setLoading(orderId)
     const order = orders.find(o => o.id === orderId)
-    if (!order) return
+    if (!order) { setLoading(null); return }
     for (const item of order.items) {
       const ok = await deductStock(item.product_id || item.id, item.quantity)
       if (!ok) {
         alert('Stock insuficiente para aprobar este pedido.')
+        setLoading(null)
         return
       }
     }
-    await approveOrder(orderId)
+    try {
+      await approveOrder(orderId)
+    } catch (err) {
+      alert('Error al aprobar: ' + (err.message || 'desconocido'))
+    }
+    setLoading(null)
     setRefresh(r => r + 1)
   }
 
   async function handleReject(orderId) {
     if (!confirm('¿Rechazar y eliminar este pedido permanentemente?')) return
-    await rejectOrder(orderId)
+    setLoading(orderId)
+    try {
+      await rejectOrder(orderId)
+    } catch (err) {
+      alert('Error al rechazar: ' + (err.message || 'desconocido'))
+    }
+    setLoading(null)
     setRefresh(r => r + 1)
   }
 
@@ -85,10 +99,13 @@ export default function OrderList() {
                   </span>
                 </div>
               </div>
+              {o.status === 'aprobado' && o.approved_at && (
+                <p className="text-xs text-green-600 mt-1">Aprobado el {formatDate(o.approved_at)}</p>
+              )}
               {o.status === 'pendiente' && (
                 <div className="flex gap-2 shrink-0 sm:ml-4">
-                  <Button variant="primary" onClick={() => handleApprove(o.id)} className="text-xs px-3 py-1.5">APROBAR</Button>
-                  <Button variant="danger" onClick={() => handleReject(o.id)} className="text-xs px-3 py-1.5">RECHAZAR</Button>
+                  <Button variant="primary" onClick={() => handleApprove(o.id)} disabled={loading === o.id} className="text-xs px-3 py-1.5">{loading === o.id ? '...' : 'APROBAR'}</Button>
+                  <Button variant="danger" onClick={() => handleReject(o.id)} disabled={loading === o.id} className="text-xs px-3 py-1.5">{loading === o.id ? '...' : 'RECHAZAR'}</Button>
                 </div>
               )}
             </div>
