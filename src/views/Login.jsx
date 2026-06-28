@@ -11,14 +11,14 @@ export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     if (!username || !password) {
       setError('Completa todos los campos.')
       return
     }
-    const ok = login(username, password)
+    const ok = await login(username, password)
     if (!ok) {
       setError('Credenciales inválidas.')
       return

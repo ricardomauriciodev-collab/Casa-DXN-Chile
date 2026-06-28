@@ -46,8 +46,12 @@ export default function Register() {
       setError('Todos los campos son obligatorios.')
       return
     }
-    await registerUser(form)
-    navigate('/login')
+    try {
+      await registerUser(form)
+      navigate('/login')
+    } catch (err) {
+      setError(err.message || 'Error al registrar. Intenta de nuevo.')
+    }
   }
 
   const passwordPreview = getGeneratedPassword(form.rut)

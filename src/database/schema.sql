@@ -39,6 +39,37 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 
 -- ============================================================
+-- RLS: Políticas para users
+-- ============================================================
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read users" ON users
+  FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can insert users" ON users
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can delete users" ON users
+  FOR DELETE USING (true);
+
+-- ============================================================
+-- RLS: Políticas para products
+-- ============================================================
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can read products" ON products
+  FOR SELECT USING (true);
+
+CREATE POLICY "Anyone can insert products" ON products
+  FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Anyone can update products" ON products
+  FOR UPDATE USING (true);
+
+CREATE POLICY "Anyone can delete products" ON products
+  FOR DELETE USING (true);
+
+-- ============================================================
 -- RLS: Políticas para orders
 -- ============================================================
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
