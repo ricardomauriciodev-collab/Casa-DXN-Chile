@@ -46,17 +46,22 @@ Routes loaded by `App.jsx`:
 ## Auth
 - **Session**: `sessionStorage.dxn_user` (se borra al cerrar navegador)
 - **Fixed users** (hardcoded in `authService.js`, also seeded in Supabase):
-  - `test` / `123456` → role `client`
-  - `admin` / `123456` → role `admin`
+  - `test` / `123456` → role `client`, pais: Chile
+  - `admin` / `123456` → role `admin`, pais: Chile
 - **In Supabase mode**: fixed users get their real UUID from DB (not hardcoded `'1'`/`'2'`)
 - **Register** (`/register`):
-  - Auto-generates `username` = nombre lowercase (sin espacios), `password` = últimos 4 dígitos del RUT (antes del guión)
-  - RUT auto-formateado `XX.XXX.XXX-X` mientras escribe
+  - Campos: nombre_completo, pais (select latinoamerica), numero_carnet, codigo_distribuidor, direccion
+  - `username` = codigo_distribuidor (string exacto)
+  - `password` = últimos 4 dígitos del codigo_distribuidor (solo dígitos, `.replace(/\D/g,'')`)
+  - Placeholder del carnet cambia según país seleccionado (ej: "RUT: 12.345.678-5" para Chile)
+  - Sin formato forzado — usuario escribe libremente
+  - `codigo_distribuidor` único: validación en `isCodigoUnico()` contra fixed users + mock users + Supabase
   - Redirects to `/login` (no auto-login)
   - `handleSubmit` tiene try/catch — muestra error si falla
 - **Login** (`/login`):
-  - Busca en FIXED_USERS primero, luego Supabase (si disponible), luego mock users registrados
-  - Login es async — usa `await login()` (bug anterior: falta de `await` hacía que cualquier credencial pareciera válida)
+  - Campo: "Código de Distribuidor" + "Contraseña" (últimos 4 dígitos)
+  - Busca por `codigo_distribuidor` (o `username` como fallback) en FIXED_USERS, Supabase, mock users
+  - Login es async — usa `await login()`
 
 ## Cart & WhatsApp
 - `totalPV` calculado en `CartContext`, redondeado a 2 decimales
@@ -89,12 +94,14 @@ Schema completo en `src/database/schema.sql`. 3 tablas:
 |--------|------|-------|
 | id | UUID | PK |
 | nombre_completo | TEXT | |
-| rut | TEXT | UNIQUE |
-| codigo_distribuidor | TEXT | Nullable |
+| rut | TEXT | Nullable (reemplazado por numero_carnet) |
+| codigo_distribuidor | TEXT | Nullable, único por usuario |
+| pais | TEXT | Nullable, país latinoamericano |
+| numero_carnet | TEXT | Nullable, documento identidad país |
 | direccion | TEXT | |
 | role | TEXT | Default 'client' |
-| username | TEXT | Agregado via ALTER TABLE |
-| password | TEXT | Agregado via ALTER TABLE |
+| username | TEXT | = codigo_distribuidor |
+| password | TEXT | Últimos 4 dígitos de codigo_distribuidor |
 | created_at | TIMESTAMPTZ | |
 
 ### `orders`
@@ -125,7 +132,7 @@ All tables have RLS enabled with permissive policies (anon key = full access):
 Ruta protegida — solo accesible con `role: admin`. 3 pestañas:
 
 ### Users
-Lista usuarios registrados + botón Eliminar. Llama `getUsers()` / `deleteUser()`.
+Lista usuarios registrados + botón Eliminar. Muestra nombre, país, RUT/carnet, código distribuidor. Llama `getUsers()` / `deleteUser()`.
 
 ### Inventory (Inventario)
 CRUD completo con drag-drop de imágenes:
@@ -180,7 +187,7 @@ Animaciones: `fade-in` (0.2s), `slide-up` (0.25s). Usadas por modal y transicion
 
 ## Important Conventions
 - **Column names** en Supabase (no traducir a español): `user_name`, `total_clp`, `total_pv`, `approved_at`
-- **FIXED_USERS** en `authService.js` tiene `id: '1'` y `id: '2'` para mock; en Supabase mode se reemplazan con UUIDs reales
+- **FIXED_USERS** en `authService.js` tiene `id: '1'` y `id: '2'` para mock; en Supabase mode se reemplazan con UUIDs reales. Sus `codigo_distribuidor` = 'test' y 'admin' respectivamente (también son sus credenciales de login).
 - **Servicios async**: siempre usar `await` o `.then()` — nunca llamar funciones async sin `await`
 - **Error handling en componentes**: try/catch con feedback al usuario (no `.catch(() => {})` silencioso)
 - **Popup blockers**: `window.open()` debe ejecutarse sincrónicamente (antes de cualquier `await`)

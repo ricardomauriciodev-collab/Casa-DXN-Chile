@@ -19,10 +19,14 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   nombre_completo TEXT NOT NULL,
-  rut TEXT NOT NULL UNIQUE,
+  rut TEXT DEFAULT NULL,
   codigo_distribuidor TEXT DEFAULT NULL,
+  pais TEXT DEFAULT NULL,
+  numero_carnet TEXT DEFAULT NULL,
   direccion TEXT NOT NULL,
   role TEXT DEFAULT 'client',
+  username TEXT DEFAULT NULL,
+  password TEXT DEFAULT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

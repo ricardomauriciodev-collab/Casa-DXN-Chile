@@ -33,13 +33,13 @@ export default function Login() {
         {error && <p className="text-red-600 text-sm mb-4 text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Usuario</label>
+            <label className="block text-sm font-medium mb-1">Código de Distribuidor</label>
             <input
               type="text"
               value={username}
               onChange={e => setUsername(e.target.value)}
               className="w-full border rounded px-3 py-2"
-              placeholder="Tu Nombre"
+              placeholder="Ingresa tu código"
             />
           </div>
           <div>
@@ -49,7 +49,7 @@ export default function Login() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               className="w-full border rounded px-3 py-2"
-              placeholder="Ultimos 4 digitos sin el numero verificador"
+              placeholder="Últimos 4 dígitos de tu código"
             />
           </div>
           <Button type="submit" className="w-full">Ingresar</Button>

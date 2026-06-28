@@ -23,6 +23,7 @@ export default function UserList() {
         <thead>
           <tr className="bg-gray-100 text-left">
             <th className="p-2">Nombre</th>
+            <th className="p-2">País</th>
             <th className="p-2">RUT</th>
             <th className="p-2">Código Distribuidor</th>
             <th className="p-2">Acción</th>
@@ -32,7 +33,8 @@ export default function UserList() {
           {users.map(u => (
             <tr key={u.id} className="border-t hover:bg-gray-50">
               <td className="p-2">{u.nombre_completo}</td>
-              <td className="p-2">{u.rut}</td>
+              <td className="p-2">{u.pais || '-'}</td>
+              <td className="p-2">{u.rut || u.numero_carnet || '-'}</td>
               <td className="p-2">{u.codigo_distribuidor || '-'}</td>
               <td className="p-2">
                 <Button variant="danger" onClick={() => handleDelete(u.id)}>
