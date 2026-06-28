@@ -59,6 +59,7 @@ export async function registerUser(userData) {
   }
   const { data: user, error } = await supabase.from('users').insert([{
     nombre_completo: userData.nombre_completo,
+    rut: userData.numero_carnet,
     codigo_distribuidor: userData.codigo_distribuidor,
     pais: userData.pais,
     numero_carnet: userData.numero_carnet,
