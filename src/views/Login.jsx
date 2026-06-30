@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import WhatsAppFloat from '../components/ui/WhatsAppFloat'
 
 export default function Login() {
   const [username, setUsername] = useState('')
@@ -58,7 +59,11 @@ export default function Login() {
           ¿No tienes cuenta?{' '}
           <Link to="/register" className="text-dxn-red hover:underline">Regístrate</Link>
         </p>
+        <p className="text-center text-xs text-gray-400 mt-4 md:hidden">
+          ¿No tienes código? Presiona el botón de WhatsApp flotante para obtener el tuyo
+        </p>
       </Card>
+      <WhatsAppFloat />
     </div>
   )
 }
