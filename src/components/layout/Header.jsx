@@ -11,7 +11,7 @@ function PVProgressBar({ totalPV }) {
 
   return (
     <div className="flex items-center gap-2 flex-1 min-w-0">
-      <div className="flex-1 min-w-0 h-2 bg-white/20 rounded-full overflow-hidden relative">
+      <div className="flex-1 min-w-0 h-2.5 bg-white/15 rounded-full overflow-hidden relative ring-1 ring-white/40">
         <div
           className={`h-full rounded-full transition-all duration-500 ease-out ${barColor}`}
           style={{ width: `${pct}%` }}

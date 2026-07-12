@@ -1,6 +1,6 @@
-import { useId } from 'react'
+import { useId, memo } from 'react'
 
-export default function Input({
+const Input = memo(function Input({
   label,
   error,
   helper,
@@ -58,4 +58,6 @@ export default function Input({
       )}
     </div>
   )
-}
+})
+
+export default Input

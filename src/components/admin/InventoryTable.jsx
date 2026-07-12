@@ -59,7 +59,8 @@ export default function InventoryTable() {
   }
 
   function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setForm(prev => ({ ...prev, [name]: value }))
   }
 
   async function handleSubmit(e) {
@@ -237,6 +238,7 @@ export default function InventoryTable() {
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input
+            id="prod-name"
             label="Nombre del producto"
             name="name"
             value={form.name}
@@ -245,6 +247,7 @@ export default function InventoryTable() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
+              id="prod-price"
               label="Precio CLP"
               type="number"
               name="price"
@@ -253,6 +256,7 @@ export default function InventoryTable() {
               required
             />
             <Input
+              id="prod-pv"
               label="PV (Puntos Volumen)"
               type="number"
               step="0.1"
@@ -264,6 +268,7 @@ export default function InventoryTable() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <Input
+              id="prod-stock"
               label="Stock actual"
               type="number"
               name="stock"
@@ -271,6 +276,7 @@ export default function InventoryTable() {
               onChange={handleChange}
             />
             <Input
+              id="prod-low-stock"
               label="Alerta stock bajo"
               type="number"
               name="low_stock_threshold"
@@ -278,6 +284,7 @@ export default function InventoryTable() {
               onChange={handleChange}
             />
             <Input
+              id="prod-out-stock"
               label="Stock crítico"
               type="number"
               name="out_of_stock_threshold"

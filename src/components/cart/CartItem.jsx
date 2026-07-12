@@ -6,7 +6,7 @@ export default function CartItem({ item }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-4 border-b border-border py-4 last:border-b-0 animate-fade-in">
       {/* Miniatura */}
-      <div className="size-16 shrink-0 rounded-md bg-surface-muted border border-border overflow-hidden flex items-center justify-center">
+      <div className="size-16 shrink-0 rounded-md bg-white border border-border overflow-hidden flex items-center justify-center">
         {item.image_url ? (
           <img src={item.image_url} alt="" className="size-full object-contain p-1" loading="lazy" />
         ) : (

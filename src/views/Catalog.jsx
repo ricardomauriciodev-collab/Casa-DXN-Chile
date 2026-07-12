@@ -14,7 +14,7 @@ const STATUS_VARIANT = {
 function ProductPlaceholder({ name }) {
   const initial = (name || '?').charAt(0).toUpperCase()
   return (
-    <div className="size-full flex items-center justify-center bg-accent-soft">
+    <div className="size-full flex items-center justify-center bg-white">
       <span className="text-5xl font-bold text-accent select-none" aria-hidden="true">
         {initial}
       </span>
@@ -34,7 +34,7 @@ function ProductCard({ p, qty, onAdd, onUpdateQty }) {
 
   return (
     <Card interactive className="group flex flex-col">
-      <div className="relative aspect-[4/3] bg-surface-muted overflow-hidden border-b border-border">
+      <div className="relative aspect-[4/3] bg-white overflow-hidden border-b border-border">
         {p.image_url ? (
           <img
             src={p.image_url}
