@@ -30,6 +30,7 @@ const PAISES = [
 
 export default function Register() {
   const [form, setForm] = useState({ nombre_completo: '', pais: '', numero_carnet: '', codigo_distribuidor: '', direccion: '' })
+  const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -51,6 +52,10 @@ export default function Register() {
     setError('')
     if (!form.nombre_completo || !form.pais || !form.numero_carnet || !form.codigo_distribuidor || !form.direccion) {
       setError('Todos los campos son obligatorios.')
+      return
+    }
+    if (!aceptaTerminos) {
+      setError('Debes aceptar los Términos y Condiciones para registrarte.')
       return
     }
     setLoading(true)
@@ -144,6 +149,25 @@ export default function Register() {
               required
               autoComplete="street-address"
             />
+
+            <label className="flex items-start gap-3 rounded-lg border border-border-strong bg-surface px-3.5 py-3 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                name="acepta_terminos"
+                checked={aceptaTerminos}
+                onChange={(e) => setAceptaTerminos(e.target.checked)}
+                required
+                aria-required="true"
+                className="size-4 mt-0.5 shrink-0 accent-[#CC0000]"
+              />
+              <span className="text-sm text-foreground leading-snug">
+                Acepto los{' '}
+                <Link to="/terminos" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-medium">
+                  Términos y Condiciones
+                </Link>{' '}
+                del sitio.
+              </span>
+            </label>
 
             <div className="bg-accent-soft border border-accent/15 rounded-lg p-4 flex flex-col gap-1.5">
               <p className="text-sm text-foreground">

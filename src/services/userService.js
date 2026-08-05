@@ -1,4 +1,5 @@
 import { supabase } from '../config/supabaseClient'
+import { hashPassword } from '../utils/password'
 
 const STORAGE_KEY = 'dxn_users'
 
@@ -50,8 +51,9 @@ export async function registerUser(userData) {
   const { username, password } = generateCredentials(userData.codigo_distribuidor)
   const unico = await isCodigoUnico(userData.codigo_distribuidor)
   if (!unico) throw new Error('El código de distribuidor ya está registrado.')
+  const passwordHash = await hashPassword(password)
   if (!supabase) {
-    const newUser = { id: 'u' + Date.now(), ...userData, role: 'client', username, password }
+    const newUser = { id: 'u' + Date.now(), ...userData, role: 'client', username, password: passwordHash, terms_accepted_at: new Date().toISOString() }
     const users = loadMockUsers()
     users.push(newUser)
     saveMockUsers(users)
@@ -66,7 +68,8 @@ export async function registerUser(userData) {
     direccion: userData.direccion,
     role: 'client',
     username,
-    password,
+    password: passwordHash,
+    terms_accepted_at: new Date().toISOString(),
   }]).select().single()
   if (error) throw error
   return user

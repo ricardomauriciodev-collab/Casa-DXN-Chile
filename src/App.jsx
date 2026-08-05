@@ -4,6 +4,7 @@ import Catalog from './views/Catalog'
 import Login from './views/Login'
 import Register from './views/Register'
 import Cart from './views/Cart'
+import Terms from './views/Terms'
 import AdminDashboard from './views/AdminDashboard'
 import NotFound from './views/NotFound'
 
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/terminos" element={<Terms />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

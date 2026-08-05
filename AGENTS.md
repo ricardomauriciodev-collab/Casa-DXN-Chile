@@ -40,17 +40,25 @@ Routes loaded by `App.jsx`:
 - `/login` — Login
 - `/register` — Register
 - `/cart` — Cart
+- `/terminos` — Términos y Condiciones (link en footer + checkbox de registro)
 - `/admin` — Admin dashboard (protected: `isAdmin` check)
 - `*` — NotFound
 
 ## Auth
 - **Session**: `sessionStorage.dxn_user` (se borra al cerrar navegador)
+- **Password**: guardada como **hash SHA-256** (Web Crypto, `src/utils/password.js`), nunca en texto plano
+  - `loginMock` compara `hash(input) === stored` y soporta legado texto-plano (`stored === input`) para datos pre-migración
+  - Login NUNCA consulta `password` en DB (solo `codigo_distribuidor`/`username`) — el hash se compara en JS
+  - `registerUser` guarda `password: await hashPassword(last4digits)`
+  - Migración aplicada: passwords existentes convertidos con `pgcrypto digest()`; guard `!~ '^[0-9a-f]{64}$'` evita re-hash
 - **Fixed users** (hardcoded in `authService.js`, also seeded in Supabase):
   - `test` / `123456` → role `client`, pais: Chile
   - `admin` / `123456` → role `admin`, pais: Chile
 - **In Supabase mode**: fixed users get their real UUID from DB (not hardcoded `'1'`/`'2'`)
 - **Register** (`/register`):
   - Campos: nombre_completo, pais (select latinoamerica), numero_carnet, codigo_distribuidor, direccion
+  - Checkbox obligatorio "Acepto los Términos y Condiciones" (link a `/terminos`) — bloquea submit si no está marcado
+  - `terms_accepted_at` se guarda al registrar (ISO timestamp) en mock + Supabase
   - `username` = codigo_distribuidor (string exacto)
   - `password` = últimos 4 dígitos del codigo_distribuidor (solo dígitos, `.replace(/\D/g,'')`)
   - Placeholder del carnet cambia según país seleccionado (ej: "RUT: 12.345.678-5" para Chile)
@@ -102,6 +110,7 @@ Schema completo en `src/database/schema.sql`. 3 tablas:
 | role | TEXT | Default 'client' |
 | username | TEXT | = codigo_distribuidor |
 | password | TEXT | Últimos 4 dígitos de codigo_distribuidor |
+| terms_accepted_at | TIMESTAMPTZ | Nullable, se llena al registrar (ISO timestamp) |
 | created_at | TIMESTAMPTZ | |
 
 ### `orders`
@@ -184,6 +193,12 @@ Animaciones: `fade-in` (0.2s), `slide-up` (0.25s). Usadas por modal y transicion
   VITE_SUPABASE_ANON_KEY=sb_publishable_...
   ```
   Sin estas vars, la app funciona en modo mock (local).
+
+## Security (estado actual y limitaciones conocidas)
+- **Hashing**: passwords con SHA-256 (Web Crypto). Requiere contexto seguro (https o localhost) para `crypto.subtle`.
+- **RLS habilitada** en `users`, `products`, `orders` con policies **permisivas** (anon key = acceso completo). Es la forma en que la app opera hoy (auth custom sin Supabase Auth).
+- **Limitación conocida**: el panel admin (`/admin`) se protege solo client-side (`role: admin`). Cualquiera con la anon key puede leer/escribir en las tablas. Fix recomendado (no implementado): migrar a Supabase Auth + edge functions con service-role para operaciones admin, y RLS estricto (`auth.uid()` / claims).
+- **sessionStorage** guarda datos de sesión (nombre, RUT, dirección) — necesario para el mensaje de WhatsApp. No expira solo; se limpia al cerrar navegador.
 
 ## Important Conventions
 - **Column names** en Supabase (no traducir a español): `user_name`, `total_clp`, `total_pv`, `approved_at`

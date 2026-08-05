@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
@@ -31,6 +33,11 @@ export default function Footer() {
           <div>
             <h3 className="text-sm font-semibold mb-3 text-white/90">Información</h3>
             <ul className="space-y-2 text-sm text-white/80">
+              <li>
+                <Link to="/terminos" className="hover:text-white transition-colors">
+                  Términos y Condiciones
+                </Link>
+              </li>
               <li>{year} Casa DXN Chile</li>
               <li className="text-xs text-white/55">Todos los derechos reservados.</li>
             </ul>

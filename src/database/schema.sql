@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
   role TEXT DEFAULT 'client',
   username TEXT DEFAULT NULL,
   password TEXT DEFAULT NULL,
+  terms_accepted_at TIMESTAMPTZ DEFAULT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
