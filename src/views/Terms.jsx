@@ -28,8 +28,8 @@ export default function Terms() {
           <Section title="1. Identificación del sitio">
             <p>
               Este sitio web pertenece y es operado por{' '}
-              <span className="font-medium text-foreground">[razón social del comercio]</span>, RUT{' '}
-              <span className="font-medium text-foreground">[RUT del comercio]</span>, distribuidor
+              <span className="font-medium text-foreground">DXN Internacional Chile SpA</span>, RUT{' '}
+              <span className="font-medium text-foreground">76.071.295-7</span>, distribuidor
               independiente de productos DXN en Chile. Contacto:{' '}
               <a href="https://wa.me/56975716555" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
                 +56 9 7571 6555
@@ -83,6 +83,23 @@ export default function Terms() {
             <ul className="list-disc pl-5 space-y-1">
               <li>Los precios se expresan en pesos chilenos (CLP) e incluyen IVA (19%) cuando corresponda.</li>
               <li>Este sitio no realiza cobros en línea. El pago se coordina con el comercio mediante transferencia bancaria o efectivo, acordado por WhatsApp.</li>
+              <li>El pago mediante transferencia bancaria se realiza a Banco de Chile en las siguientes cuentas:
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  <li>
+                    Empresa:{' '}
+                    <span className="font-medium text-foreground">DXN Internacional Chile SpA</span> — RUT{' '}
+                    <span className="font-medium text-foreground">76.071.295-7</span> — Cuenta Corriente N°{' '}
+                    <span className="font-medium text-foreground">0111074054</span>
+                  </li>
+                  <li>
+                    Personal:{' '}
+                    <span className="font-medium text-foreground">Pablo Mauricio Plata</span> — RUT{' '}
+                    <span className="font-medium text-foreground">24.148.931-0</span> — Cuenta Corriente N°{' '}
+                    <span className="font-medium text-foreground">001073985204</span>
+                  </li>
+                </ul>
+              </li>
+              <li>Indica tu código de distribuidor como referencia de la transferencia.</li>
               <li>El pedido se despacha una vez verificado el pago y aprobado por el administrador.</li>
             </ul>
           </Section>
@@ -91,6 +108,7 @@ export default function Terms() {
             <ul className="list-disc pl-5 space-y-1">
               <li>Conforme a la normativa del Servicio de Impuestos Internos (SII) de Chile, cada venta genera una boleta electrónica (DTE).</li>
               <li>Los datos del comprador —nombre, RUT, dirección y código de distribuidor DXN— se utilizan para emitir la boleta correspondiente a la venta.</li>
+              <li>La boleta electrónica se emite por la empresa DXN Internacional Chile SpA, RUT 76.071.295-7.</li>
               <li>Es tu responsabilidad que los datos tributarios proporcionados sean correctos y correspondan a tu titularidad.</li>
               <li>La boleta se entrega por medios digitales (WhatsApp, correo electrónico o QR), conforme a las reglas vigentes del SII.</li>
             </ul>
