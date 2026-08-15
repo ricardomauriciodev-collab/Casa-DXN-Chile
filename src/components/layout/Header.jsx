@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/CartContext'
+import StarRating from '../ui/StarRating'
 
 function PVProgressBar({ totalPV }) {
   const pct = Math.min((totalPV / 100) * 100, 100)
@@ -30,10 +32,19 @@ function PVProgressBar({ totalPV }) {
 }
 
 export default function Header() {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout, isAdmin, refreshUser } = useAuth()
   const { totalPV, itemCount } = useCart()
   const location = useLocation()
   const isLoginPage = location.pathname === '/login'
+
+  useEffect(() => {
+    if (!user) return
+    refreshUser()
+    const onFocus = () => refreshUser()
+    window.addEventListener('focus', onFocus)
+    return () => window.removeEventListener('focus', onFocus)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <header className="sticky top-0 z-40 bg-dxn-red text-white shadow-lg">
@@ -90,9 +101,19 @@ export default function Header() {
                 )}
                 {user ? (
                   <div className="flex items-center gap-2">
-                    <span className="hidden md:inline text-xs text-white/85 max-w-32 truncate" title={user.nombre_completo}>
-                      {user.nombre_completo}
-                    </span>
+                    <div className="hidden sm:flex flex-col items-end min-w-0">
+                      <span className="text-xs text-white/85 max-w-32 truncate leading-tight" title={user.nombre_completo}>
+                        {user.nombre_completo}
+                      </span>
+                      <span className="flex items-center gap-1.5 max-w-32">
+                        {user.codigo_distribuidor && (
+                          <span className="text-[10px] font-mono text-white/70 truncate" title={user.codigo_distribuidor}>
+                            {user.codigo_distribuidor}
+                          </span>
+                        )}
+                        <StarRating value={Number(user.stars) || 0} size="size-3" />
+                      </span>
+                    </div>
                     <button
                       onClick={logout}
                       className="bg-white text-accent px-3 py-1.5 rounded-md text-xs font-semibold cursor-pointer hover:bg-white/90 transition-colors shrink-0"

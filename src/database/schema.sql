@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
   username TEXT DEFAULT NULL,
   password TEXT DEFAULT NULL,
   terms_accepted_at TIMESTAMPTZ DEFAULT NULL,
+  stars NUMERIC NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -57,6 +58,9 @@ CREATE POLICY "Anyone can insert users" ON users
 
 CREATE POLICY "Anyone can delete users" ON users
   FOR DELETE USING (true);
+
+CREATE POLICY "Anyone can update users" ON users
+  FOR UPDATE USING (true);
 
 -- ============================================================
 -- RLS: Políticas para products

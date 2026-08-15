@@ -2,8 +2,8 @@ import { supabase } from '../config/supabaseClient'
 import { hashPassword } from '../utils/password'
 
 const FIXED_USERS = [
-  { id: '1', nombre_completo: 'Cliente Test', rut: '11.111.111-1', codigo_distribuidor: 'test', pais: 'Chile', numero_carnet: '11.111.111-1', direccion: 'Santiago, Chile', role: 'client', username: 'test', password: '123456' },
-  { id: '2', nombre_completo: 'Admin DXN', rut: '22.222.222-2', codigo_distribuidor: 'admin', pais: 'Chile', numero_carnet: '22.222.222-2', direccion: 'Santiago, Chile', role: 'admin', username: 'admin', password: '123456' },
+  { id: '1', nombre_completo: 'Cliente Test', rut: '11.111.111-1', codigo_distribuidor: 'test', pais: 'Chile', numero_carnet: '11.111.111-1', direccion: 'Santiago, Chile', role: 'client', username: 'test', password: '123456', stars: 0 },
+  { id: '2', nombre_completo: 'Admin DXN', rut: '22.222.222-2', codigo_distribuidor: 'admin', pais: 'Chile', numero_carnet: '22.222.222-2', direccion: 'Santiago, Chile', role: 'admin', username: 'admin', password: '123456', stars: 0 },
 ]
 
 function sanitizeCode(codigo) {

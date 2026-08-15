@@ -2,6 +2,7 @@ import { useState } from 'react'
 import UserList from '../components/admin/UserList'
 import InventoryTable from '../components/admin/InventoryTable'
 import OrderList from '../components/admin/OrderList'
+import StarsManager from '../components/admin/StarsManager'
 import Card from '../components/ui/Card'
 import { useAuth } from '../context/AuthContext'
 import { Navigate } from 'react-router-dom'
@@ -10,6 +11,7 @@ const TABS = [
   { key: 'users', label: 'Usuarios' },
   { key: 'inventory', label: 'Inventario' },
   { key: 'orders', label: 'Pedidos' },
+  { key: 'stars', label: 'Estrellas' },
 ]
 
 export default function AdminDashboard() {
@@ -50,6 +52,7 @@ export default function AdminDashboard() {
         {activeTab === 'users' && <UserList />}
         {activeTab === 'inventory' && <InventoryTable />}
         {activeTab === 'orders' && <OrderList />}
+        {activeTab === 'stars' && <StarsManager />}
       </Card>
     </div>
   )

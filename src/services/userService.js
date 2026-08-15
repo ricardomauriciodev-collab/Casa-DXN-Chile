@@ -4,8 +4,8 @@ import { hashPassword } from '../utils/password'
 const STORAGE_KEY = 'dxn_users'
 
 const SEED_USERS = [
-  { id: 'u1', nombre_completo: 'Juan Pérez', rut: '12.345.678-9', codigo_distribuidor: 'DXN-100', pais: 'Chile', numero_carnet: '12.345.678-9', direccion: 'Av. Providencia 123', role: 'client', username: 'DXN-100', password: '100' },
-  { id: 'u2', nombre_completo: 'María González', rut: '23.456.789-0', codigo_distribuidor: 'DXN-200', pais: 'Chile', numero_carnet: '23.456.789-0', direccion: 'Calle Central 456', role: 'client', username: 'DXN-200', password: '200' },
+  { id: 'u1', nombre_completo: 'Juan Pérez', rut: '12.345.678-9', codigo_distribuidor: 'DXN-100', pais: 'Chile', numero_carnet: '12.345.678-9', direccion: 'Av. Providencia 123', role: 'client', username: 'DXN-100', password: '100', stars: 0 },
+  { id: 'u2', nombre_completo: 'María González', rut: '23.456.789-0', codigo_distribuidor: 'DXN-200', pais: 'Chile', numero_carnet: '23.456.789-0', direccion: 'Calle Central 456', role: 'client', username: 'DXN-200', password: '200', stars: 0 },
 ]
 
 function loadMockUsers() {
@@ -53,7 +53,7 @@ export async function registerUser(userData) {
   if (!unico) throw new Error('El código de distribuidor ya está registrado.')
   const passwordHash = await hashPassword(password)
   if (!supabase) {
-    const newUser = { id: 'u' + Date.now(), ...userData, role: 'client', username, password: passwordHash, terms_accepted_at: new Date().toISOString() }
+    const newUser = { id: 'u' + Date.now(), ...userData, role: 'client', username, password: passwordHash, terms_accepted_at: new Date().toISOString(), stars: 0 }
     const users = loadMockUsers()
     users.push(newUser)
     saveMockUsers(users)
@@ -70,6 +70,7 @@ export async function registerUser(userData) {
     username,
     password: passwordHash,
     terms_accepted_at: new Date().toISOString(),
+    stars: 0,
   }]).select().single()
   if (error) throw error
   return user
@@ -90,6 +91,15 @@ export async function getAllMockUsers() {
   const { data, error } = await supabase.from('users').select('*')
   if (error) throw error
   return data
+}
+
+export async function getUserById(userId) {
+  if (!supabase) {
+    return loadMockUsers().find((u) => u.id === userId) || null
+  }
+  const { data, error } = await supabase.from('users').select('*').eq('id', userId).maybeSingle()
+  if (error) throw error
+  return data || null
 }
 
 export { generateCredentials }

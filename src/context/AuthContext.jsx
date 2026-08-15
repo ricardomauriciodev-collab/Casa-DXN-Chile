@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { loginMock, logoutMock, getCurrentUser } from '../services/authService'
+import { getUserById } from '../services/userService'
 
 const AuthContext = createContext(null)
 
@@ -22,8 +23,20 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
+  async function refreshUser() {
+    const current = getCurrentUser()
+    if (!current) return
+    try {
+      const fresh = await getUserById(current.id)
+      if (!fresh) return
+      const { password: _, ...safeUser } = fresh
+      sessionStorage.setItem('dxn_user', JSON.stringify(safeUser))
+      setUser(safeUser)
+    } catch {}
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshUser, isAdmin: user?.role === 'admin' }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getOrders, approveOrder, rejectOrder } from '../../services/orderService'
 import { deductStock } from '../../services/productService'
+import { grantStarsForUser } from '../../services/starService'
 import Button from '../ui/Button'
 import Badge from '../ui/Badge'
 import Modal from '../ui/Modal'
@@ -54,6 +55,7 @@ export default function OrderList() {
 
     try {
       await approveOrder(orderId)
+      await grantStarsForUser(order.user_id)
       setRefresh((r) => r + 1)
     } catch (err) {
       alert('Error al aprobar: ' + (err.message || 'desconocido'))

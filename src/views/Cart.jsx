@@ -4,6 +4,7 @@ import CartItem from '../components/cart/CartItem'
 import CartSummary from '../components/cart/CartSummary'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import { calculateStars } from '../utils/stars'
 import { Link } from 'react-router-dom'
 
 export default function Cart() {
@@ -66,6 +67,13 @@ export default function Cart() {
                 <span className="font-semibold text-base font-mono text-foreground">
                   {totalPV} PV
                 </span>
+              </div>
+              <div className="flex items-center gap-2 py-2 border-t border-border">
+                <span className="text-sm text-muted-foreground" aria-hidden="true">⭐</span>
+                <p className="text-sm text-foreground">
+                  Con este pedido acumularás{' '}
+                  <strong className="text-[#C77400]">+{calculateStars(totalPV)}</strong> Estrellas
+                </p>
               </div>
               {user && <CartSummary />}
               {!user && (
