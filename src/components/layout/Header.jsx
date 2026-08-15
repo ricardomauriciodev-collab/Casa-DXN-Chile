@@ -55,6 +55,18 @@ export default function Header() {
             <img src="/logo.png" alt="Casa DXN Chile" className="h-9 md:h-11" />
           </Link>
 
+          {user && (
+            <div
+              className="flex items-center gap-1.5 shrink-0 bg-white/10 rounded-full px-2.5 py-1"
+              title={`${Number(user.stars) || 0} de 5 estrellas`}
+            >
+              <StarRating value={Number(user.stars) || 0} size="size-3.5 md:size-4" />
+              <span className="text-xs font-semibold text-white whitespace-nowrap">
+                {Number(user.stars) || 0}/5
+              </span>
+            </div>
+          )}
+
           {!isLoginPage && (
             <nav aria-label="Principal" className="hidden md:flex flex-1 items-center justify-center min-w-0">
               <PVProgressBar totalPV={totalPV} />
@@ -102,17 +114,14 @@ export default function Header() {
                 {user ? (
                   <div className="flex items-center gap-2">
                     <div className="hidden sm:flex flex-col items-end min-w-0">
-                      <span className="text-xs text-white/85 max-w-32 truncate leading-tight" title={user.nombre_completo}>
+                      <span className="text-xs text-white max-w-32 truncate leading-tight" title={user.nombre_completo}>
                         {user.nombre_completo}
                       </span>
-                      <span className="flex items-center gap-1.5 max-w-32">
-                        {user.codigo_distribuidor && (
-                          <span className="text-[10px] font-mono text-white/70 truncate" title={user.codigo_distribuidor}>
-                            {user.codigo_distribuidor}
-                          </span>
-                        )}
-                        <StarRating value={Number(user.stars) || 0} size="size-3" />
-                      </span>
+                      {user.codigo_distribuidor && (
+                        <span className="text-[10px] font-mono text-white truncate max-w-32" title={user.codigo_distribuidor}>
+                          {user.codigo_distribuidor}
+                        </span>
+                      )}
                     </div>
                     <button
                       onClick={logout}

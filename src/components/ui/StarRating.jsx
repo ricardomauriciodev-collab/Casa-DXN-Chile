@@ -14,7 +14,7 @@ export default function StarRating({ value = 0, size = 'size-4', className = '' 
 
   return (
     <span className={`relative inline-flex ${className}`} aria-label={`${clamped} de ${STAR_MAX} estrellas`}>
-      <span className="flex gap-0.5 text-white/40">
+      <span className="flex gap-0.5 text-white">
         {Array.from({ length: STAR_MAX }).map((_, i) => (
           <StarIcon key={i} className={`${size} shrink-0`} />
         ))}
